@@ -1,8 +1,8 @@
 -- users
 CREATE TABLE users (
-  user_id VARCHAR2(15) NOT NULL,
-  name VARCHAR2(20) NOT NULL,
-  password VARCHAR2(20) not null,
+  user_id VARCHAR2(50) NOT NULL,
+  name VARCHAR2(100) NOT NULL,
+  password VARCHAR2(150) not null,
   address VARCHAR2(50) not null,
   regidate date default sysdate not null,
   primary key(user_id)
@@ -14,8 +14,8 @@ drop sequence seq_users_id
 -- board
 create table board (
   id number not null primary key,
-  user_id varchar2(15) not null,
-  name varchar(20) not null,
+  user_id varchar2(50) not null,
+  name varchar(100) not null,
   title varchar(200) not null,
   content CLOB not null,
   postdate date default sysdate not null,
@@ -41,3 +41,33 @@ create sequence seq_board_id
 alter table board
   add constraint board_users_fk foreign key (user_id)
   references users(user_id);
+
+-- postcode
+CREATE TABLE POSTCODE (
+  POSTCODE CHAR(5) NOT NULL,
+  SIDO VARCHAR(20),
+  SIDO_ENG VARCHAR(20),
+  SIGUNGU VARCHAR(20),
+  SIGUNGU_ENG VARCHAR(20),
+  EUPMYEON VARCHAR(20),
+  EUPMYEON_ENG VARCHAR(20),
+  DORO_CODE CHAR(19),
+  DORO_NAME VARCHAR(80),
+  DORO_NAME_ENG VARCHAR(80),
+  UNDER_YN CHAR(1),
+  BUILDING_MAIN_NO CHAR(4),
+  BUILDING_SUB_NO CHAR(4),
+  BUILDING_ID CHAR(30),
+  DELIVERY_NAME VARCHAR(100),
+  SIGUNGU_BUILDING_NAME VARCHAR(100),
+  BJDONG_CODE CHAR(30),
+  BJDONG_NAME VARCHAR(80),
+  RI_NAME VARCHAR(80),
+  HJDONG_NAME VARCHAR(80),
+  SAN_YN CHAR(1),
+  JIBUN_MAIN_NO CHAR(4),
+  JIBUN_SUB_NO CHAR(4),
+  JIBUN_SEQ_NO CHAR(5),
+  OLD_POSTCODE CHAR(5),
+  POSTCODE_SEQ_NO CHAR(2)
+);

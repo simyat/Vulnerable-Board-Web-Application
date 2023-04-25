@@ -31,6 +31,12 @@
       <artifactId>ojdbc10</artifactId>
       <version>19.15.0.0.1</version>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/org.json/json -->
+    <dependency>
+      <groupId>org.json</groupId>
+      <artifactId>json</artifactId>
+      <version>20210307</version>
+    </dependency>
   </dependencies>
   <build>
     <finalName>hackthebox</finalName>

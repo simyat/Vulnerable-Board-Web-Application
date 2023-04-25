@@ -2,18 +2,41 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>HackTheBox</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+  <meta charset="UTF-8">
+  <title>HackTheBox</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+  <style>
+    .row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+  }
+
+  .col-12 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    bottom: 150px;
+  }
+
+  .btn {
+    margin: 10px;
+  }
+  </style>
 </head>
 <body class="bg-dark">
 <div class="container">
-  <div class="row">
+  <div class="row justify-content-center">
     <div class="col-12">
       <h2 class="text-light my-5">HACK THE BOX</h2>
-      <p class="text-light">회원님, 안녕하세요. HACK THE BOX는 로그인한 회원님만 사용 가능한 서비스입니다. 로그인을 하시면 더 많은 서비스를 경험하실 수 있습니다.</p>
-      <button type="button" class="btn btn-light my-3" data-toggle="modal" data-target="#loginModal">로그인</button>
-      <button type="button" class="btn btn-light my-3" onclick="location.href='/hackthebox/api/signup.html'">회원가입</button>
+      <div class="text-center">
+        <button type="button" class="btn btn-light my-3" data-toggle="modal" data-target="#loginModal">로그인</button>
+        <button type="button" class="btn btn-light my-3" onclick="location.href='/hackthebox/api/signup.html'">회원가입</button>
+      </div>
       <div class="modal fade" id="loginModal" tabindex="-1" role="dialog" aria-labelledby="loginModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered d-flex align-items-center" role="document" style="margin-top: -13%">
           <div class="modal-content">
