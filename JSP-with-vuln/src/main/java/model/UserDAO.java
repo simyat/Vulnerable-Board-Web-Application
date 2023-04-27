@@ -2,6 +2,10 @@ package model;
 
 import java.io.PrintWriter;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import model.UserVO;
 
 public class UserDAO {
@@ -14,7 +18,7 @@ public class UserDAO {
         // 데이터베이스 연결 객체 생성 (Connection)
         public void getConnect() {
 //        데이터베이스 접속 URL
-            String URL = "jdbc:oracle:thin:@localhost:1521:xe";
+            String URL = "jdbc:oracle:thin:@localhost:1521:xe?serverTimezone=UTC&characterEncoding=UTF-8";
             String user = "inmo";
             String password = "inmo";
 
@@ -86,7 +90,94 @@ public class UserDAO {
             return vo;
         }
 
-        public void dbClose() {
+    public ArrayList<AddressVO> SearchAddress(String address) {
+        ArrayList<AddressVO> vo_list = new ArrayList<>();
+        String sido = null;
+        String sigungu = null;
+        String doro_name = null;
+        String sigungu_building_name = null;
+        String query = null;
+
+
+        ArrayList splitAddress = SplitAddress(address); // " " 기준으로 문자열 자르기
+
+        sigungu = (String) splitAddress.get(0);
+        doro_name = (String) splitAddress.get(1);
+
+        if (splitAddress.size() == 3) {
+            sigungu_building_name = (String) splitAddress.get(2);
+            query = "SELECT SIDO, SIGUNGU, DORO_NAME, SIGUNGU_BUILDING_NAME FROM postcode WHERE SIGUNGU='"
+                    + sigungu + "' AND DORO_NAME='" + doro_name + "' AND SIGUNGU_BUILDING_NAME='" + sigungu_building_name + "'";
+        } else {
+            query = "SELECT SIDO, SIGUNGU, DORO_NAME, SIGUNGU_BUILDING_NAME FROM postcode WHERE SIGUNGU='"
+                    + sigungu + "' AND DORO_NAME='" + doro_name + "'";
+        }
+        getConnect();
+        try {
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery(query);
+
+            while (rs.next()) {
+                AddressVO vo = new AddressVO();
+
+                sido = rs.getString("sido");
+                sigungu = rs.getString("sigungu");
+                doro_name = rs.getString("doro_name");
+                sigungu_building_name = rs.getString("sigungu_building_name");
+
+                vo.setSido(sido);
+                vo.setSigungu(sigungu);
+                vo.setDoro_name(doro_name);
+                if (sigungu_building_name == null) {
+                    vo.setSigungu_building_name(" ");
+                } else {
+                    vo.setSigungu_building_name(sigungu_building_name);
+                }
+
+                vo_list.add(vo);
+            }
+
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            dbClose();
+        }
+        return vo_list;
+    }
+
+    private ArrayList SplitAddress(String address) {
+        String tmp = null;
+        String[] result;
+        String sigungu = null;
+        String doro_name = null;
+        String sigungu_building_name = null;
+        ArrayList<String> list;
+
+        if (address.contains("로 ")) {
+            tmp = address.replace("로 ", "로");
+            result = tmp.split(" ");
+        } else {
+            result = address.split(" ");
+        }
+
+        sigungu = result[0];
+        doro_name = result[1];
+        list = new ArrayList<String>();
+        list.add(sigungu);
+        list.add(doro_name);
+
+        if (result.length == 3) {
+            sigungu_building_name = result[2];
+            list.add(sigungu_building_name);
+        }
+        return list;
+    }
+
+    public void dbClose() {
             try {
                 if (rs != null) rs.close();
                 if (ps != null) ps.close();

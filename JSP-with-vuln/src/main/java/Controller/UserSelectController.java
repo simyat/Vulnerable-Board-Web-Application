@@ -22,15 +22,13 @@ public class UserSelectController extends HttpServlet {
 
         UserVO newVo = (UserVO) req.getAttribute("vo");
 
-
-
         if (newVo != null) {
 //            회원가입 요청 시 받는 파라미터
             userId = newVo.getUser_id();
             userPwd = newVo.getPassword();
         } else {
             BufferedReader br = req.getReader();
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder(); // append 하기위해 StringBuilder 사용
             String line;
             while ((line = br.readLine()) != null) {
                 sb.append(line);
@@ -62,9 +60,9 @@ public class UserSelectController extends HttpServlet {
                 json.put("sessionId", sessionId); // 세션 ID를 JSON 객체에 추가
 
                 // JSON response
-                PrintWriter out = resp.getWriter();
                 resp.setContentType("application/json");
                 resp.setCharacterEncoding("UTF-8");
+                PrintWriter out = resp.getWriter();
                 out.print(json.toString());
                 out.flush();
             } else {
@@ -80,9 +78,9 @@ public class UserSelectController extends HttpServlet {
                 json.put("sessionId", sessionId); // 세션 ID를 JSON 객체에 추가
 
                 // JSON response
-                PrintWriter out = resp.getWriter();
                 resp.setContentType("application/json");
                 resp.setCharacterEncoding("UTF-8");
+                PrintWriter out = resp.getWriter();
                 out.print(json.toString());
                 out.flush();
             }
@@ -92,9 +90,9 @@ public class UserSelectController extends HttpServlet {
             json.put("login", "fail");
 
             // JSON response
-            PrintWriter out = resp.getWriter();
             resp.setContentType("application/json");
             resp.setCharacterEncoding("UTF-8");
+            PrintWriter out = resp.getWriter();
             out.print(json.toString());
             out.flush();
         }

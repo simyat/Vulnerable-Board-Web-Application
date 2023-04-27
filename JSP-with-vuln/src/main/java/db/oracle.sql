@@ -3,7 +3,7 @@ CREATE TABLE users (
   user_id VARCHAR2(50) NOT NULL,
   name VARCHAR2(100) NOT NULL,
   password VARCHAR2(150) not null,
-  address VARCHAR2(50) not null,
+  address VARCHAR2(150) not null,
   regidate date default sysdate not null,
   primary key(user_id)
 );
@@ -71,3 +71,6 @@ CREATE TABLE POSTCODE (
   OLD_POSTCODE CHAR(5),
   POSTCODE_SEQ_NO CHAR(2)
 );
+
+-- modify
+ALTER TABLE [테이블 이름] MODIFY [컬럼 이름] [타입 크기];

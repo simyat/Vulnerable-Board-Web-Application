@@ -27,7 +27,6 @@ form.addEventListener('submit', (event) => {
       })
       .then(result => {
         if (result.signup === 'success') {
-            alert('회원가입에 성공했습니다.');
             location.href="/hackthebox/board/board.jsp";
             sessionStorage.setItem("id", result.sessionId);
         } else if(result.signup === 'duplication') {
