@@ -69,7 +69,7 @@ public class UserInsertController extends HttpServlet {
                 }
             }
         } catch (NullPointerException e) {
-            resp.sendRedirect("api/signup.html");
+            resp.sendRedirect("api/signup.jsp");
             e.printStackTrace();
         }
     }
