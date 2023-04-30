@@ -77,14 +77,14 @@ public class UserDAO {
 
         if (splitAddress.size() == 3) {
             sigungu_building_name = (String) splitAddress.get(2);
-            query = "SELECT SIDO, SIGUNGU, DORO_NAM	E, SIGUNGU_BUILDING_NAME FROM postcode WHERE SIGUNGU='"
+            query = "SELECT SIDO, SIGUNGU, DORO_NAME, SIGUNGU_BUILDING_NAME FROM postcode WHERE SIGUNGU='"
                     + sigungu + "' AND DORO_NAME='" + doro_name + "' AND SIGUNGU_BUILDING_NAME='"
                     + sigungu_building_name + "'";
         } else {
             query = "SELECT SIDO, SIGUNGU, DORO_NAME, SIGUNGU_BUILDING_NAME FROM postcode WHERE SIGUNGU='"
                     + sigungu + "' AND DORO_NAME='" + doro_name + "'";
         }
-        driver.getConnect();
+        conn = driver.getConnect();
         try {
             stmt = conn.createStatement();
             rs = stmt.executeQuery(query);
