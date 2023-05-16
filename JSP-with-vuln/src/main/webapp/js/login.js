@@ -24,8 +24,8 @@ form.addEventListener("submit", (event) => {
         .then((result) => {
             if (result.login === "success") {
                 alert("로그인에 성공했습니다.");
-                location.href = "/hackthebox/board/board.jsp";
-                sessionStorage.setItem("id", result.sessionId);
+                location.href = "/hackthebox/community";
+                // sessionStorage.setItem("id", result.sessionId);
             } else if (result.login === "fail") {
                 alert("로그인에 실패했습니다. 아이디 또는 패스워드를 확인해주세요.");
                 location.href = "/hackthebox/api/login.jsp";

@@ -18,7 +18,7 @@ public class LoginPageController extends HttpServlet {
     throws ServletException, IOException {
     HttpSession session = req.getSession(false);
     if (session != null && session.getAttribute("UserId") != null) {
-      req.getRequestDispatcher("board/board.jsp").forward(req, resp);
+      req.getRequestDispatcher("community").forward(req, resp);
     } else {
       RequestDispatcher dispatcher = req.getRequestDispatcher("api/login.jsp");
       dispatcher.forward(req, resp);

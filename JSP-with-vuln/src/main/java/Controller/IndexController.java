@@ -19,7 +19,7 @@ public class IndexController extends HttpServlet {
     HttpSession session = req.getSession(false);
     if (session != null && session.getAttribute("UserId") != null) {
       RequestDispatcher dispatcher = req.getRequestDispatcher(
-        "board/board.jsp"
+        "community"
       );
       dispatcher.forward(req, resp);
     } else {

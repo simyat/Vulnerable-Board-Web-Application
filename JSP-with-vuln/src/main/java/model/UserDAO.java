@@ -10,8 +10,8 @@ public class UserDAO {
     private ResultSet rs; // DB에서 리턴받는 데이터 객체
     DB_Driver driver = new DB_Driver();
 
-    // 회원저장 동작 (Insert)
-    public int UserInsert(UserVO vo) {
+    // 회원가입
+    public int UserInsert(UserDTO vo) {
         String query = "INSERT INTO users(user_id, name, password, address) VALUES('" + vo.getUser_id() + "', '"
                 + vo.getName() + "', '" + vo.getPassword() + "', + '" + vo.getAddress() + "')"; // Oracle query
         int cnt = -1; // query 실행 결과
@@ -39,8 +39,9 @@ public class UserDAO {
         return cnt; // 1 or 0 or 4
     } // UserInsert()
 
-    public UserVO UserSelect(String userId, String userPass) {
-        UserVO vo = new UserVO();
+    // 로그인
+    public UserDTO UserSelect(String userId, String userPass) {
+        UserDTO vo = new UserDTO();
         String query = "SELECT * FROM users WHERE user_id='" + userId + "'" + " AND password='" + userPass + "'";
         conn = driver.getConnect();
         try {
@@ -62,8 +63,9 @@ public class UserDAO {
         return vo;
     }
 
-    public ArrayList<AddressVO> SearchAddress(String address) {
-        ArrayList<AddressVO> vo_list = new ArrayList<>();
+    // 주소 검색
+    public ArrayList<AddressDTO> SearchAddress(String address) {
+        ArrayList<AddressDTO> vo_list = new ArrayList<>();
         String sido = null;
         String sigungu = null;
         String doro_name = null;
@@ -90,7 +92,7 @@ public class UserDAO {
             rs = stmt.executeQuery(query);
 
             while (rs.next()) {
-                AddressVO vo = new AddressVO();
+                AddressDTO vo = new AddressDTO();
 
                 sido = rs.getString("sido");
                 sigungu = rs.getString("sigungu");
@@ -119,6 +121,7 @@ public class UserDAO {
         return vo_list;
     }
 
+    // 주소 분할 분리 예정
     private ArrayList<String> SplitAddress(String address) {
         String tmp = null;
         String[] result;

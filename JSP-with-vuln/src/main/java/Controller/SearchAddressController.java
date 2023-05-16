@@ -1,6 +1,6 @@
 package Controller;
 
-import model.AddressVO;
+import model.AddressDTO;
 import model.UserDAO;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -25,8 +25,7 @@ public class SearchAddressController extends HttpServlet {
         String address = req.getParameter("address");
 
         UserDAO dao = new UserDAO();
-        ArrayList<AddressVO> vo_list = dao.SearchAddress(address);
-
+        ArrayList<AddressDTO> vo_list = dao.SearchAddress(address);
 
         if (vo_list.size() != 0) {
             jsonObj = new JSONObject();
@@ -34,8 +33,9 @@ public class SearchAddressController extends HttpServlet {
             HashSet<String> set = new HashSet<>();
 
             for (int i = 0; i < vo_list.size(); i++) {
-                AddressVO vo = vo_list.get(i);
-                String result = vo.getSido() + " " + vo.getSigungu() + " " + vo.getDoro_name() + " " + vo.getSigungu_building_name();
+                AddressDTO vo = vo_list.get(i);
+                String result = vo.getSido() + " " + vo.getSigungu() + " " + vo.getDoro_name() + " "
+                        + vo.getSigungu_building_name();
 
                 if (!set.add(result)) {
                     continue;
@@ -47,7 +47,6 @@ public class SearchAddressController extends HttpServlet {
                 String element = it.next();
                 jsonArr.put(element);
             }
-
             jsonObj.put("search", "success");
             jsonObj.put("address", jsonArr);
 

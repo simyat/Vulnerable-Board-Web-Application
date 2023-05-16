@@ -1,6 +1,6 @@
 package Controller;
 
-import model.UserVO;
+import model.UserDTO;
 import model.UserDAO;
 import org.json.JSONObject;
 
@@ -13,9 +13,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+// 회원가입 컨트롤러
 @WebServlet("/signupprocess")
 public class UserInsertController extends HttpServlet {
-    // 현재 form에서 바로 POST 보내지만 fetch() API로 변경 예정
     @Override
     protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String userId;
@@ -42,7 +42,7 @@ public class UserInsertController extends HttpServlet {
         // 입력 값 없을 경우 에러 발생
         try {
             if (!userId.isEmpty() && !name.isEmpty() && !userPwd.isEmpty() && !address.isEmpty()) {
-                UserVO uservo = new UserVO();
+                UserDTO uservo = new UserDTO();
 
                 uservo.setUser_id(userId);
                 uservo.setName(name);
@@ -52,7 +52,7 @@ public class UserInsertController extends HttpServlet {
                 UserDAO userdao = new UserDAO();
                 int result = userdao.UserInsert(uservo);
                 if (result == 1) {
-                    // 회원가입 성공 -> 로그인 처리 컨트롤러에서 세션 생성 후 board.jsp 리다이렉트
+                    // 회원가입 성공 -> 로그인 처리 컨트롤러에서 세션 생성 후 community.jsp 리다이렉트
                     req.setAttribute("vo", uservo);
                     req.getRequestDispatcher("loginprocess").forward(req, resp);
                 } else if (result == 4) {
