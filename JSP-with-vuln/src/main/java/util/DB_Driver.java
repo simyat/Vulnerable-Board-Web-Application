@@ -8,7 +8,7 @@ public class DB_Driver {
 
     public Connection getConnect() {
 //        데이터베이스 접속 URL
-        String URL = "jdbc:oracle:thin:@172.30.1.41:1521:xe?serverTimezone=UTC&characterEncoding=UTF-8";
+        String URL = "jdbc:oracle:thin:@localhost:1521:xe?serverTimezone=UTC&characterEncoding=UTF-8";
         String user = "inmo";
         String password = "inmo";
 
