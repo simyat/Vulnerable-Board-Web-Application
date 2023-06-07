@@ -32,7 +32,8 @@ public class FileUpload extends HttpServlet{
         // String fileName = Paths.get(filePart.getSubmittedFileName()).getFileName().toString();
         String fileName = filePart.getSubmittedFileName();
         for (Part part : req.getParts()) {
-            part.write("F:\\uploads\\" + fileName);
+            // part.write("F:\\uploads\\" + fileName);
+            part.write("/var/lib/tomcat9/webapps/uploads"+fileName);
         }
     }
     

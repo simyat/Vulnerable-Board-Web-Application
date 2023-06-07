@@ -73,4 +73,4 @@ CREATE TABLE POSTCODE (
 );
 
 -- modify
-ALTER TABLE [테이블 이름] MODIFY [컬럼 이름] [타입 크기];
+-- ALTER TABLE [테이블 이름] MODIFY [컬럼 이름] [타입 크기];
