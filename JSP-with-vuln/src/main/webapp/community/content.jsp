@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%> 
 <%@ page import="model.CommunityDTO" %>
+<script src="<%= request.getContextPath() %>/js/community-api.js" charset="utf-8"></script>
+
 <%
     CommunityDTO content = (CommunityDTO) request.getAttribute("content");
 %>
@@ -20,7 +22,7 @@
     </div>
     <div>
         <%= content.getPostdate() %>
-    </div>
+    </div> 
     <div>
         <%= content.getVisit_count() %>
     </div>
@@ -32,6 +34,20 @@
     </div>
     <div>
         <%= content.getSave_file() %>
+    </div>
+    <div>
+        <% 
+            String sessionName = (String) session.getAttribute("UserName");
+            String dtoName = content.getName();
+
+            if (sessionName.equals(dtoName)){
+        %>
+            <button onclick="modify('<%= content.getId() %>')">수정</button>
+            <button onclick="delete_post('<%= content.getId() %>')">삭제</button>
+            <button onclick="community()">목록</button>
+        <% } else { %>
+            <button onclick="community()">목록</button>
+        <% } %>
     </div>
 </body>
 </html>

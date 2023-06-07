@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+// 게시글 상세정보 컨트롤러
 @WebServlet("/community/posts")
 public class CommunityPostsController extends HttpServlet {
     @Override

@@ -1,5 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%> 
+<script src="<%= request.getContextPath() %>/js/validate.js" charset="utf-8"></script>
+<script src="<%= request.getContextPath() %>/js/file.js" charset="utf-8"></script>
 
+<%
+    if (session.getAttribute("UserId") == null) { 
+%> 
+<script>
+    validateAccess();
+</script>
+<% } else { %>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -9,10 +18,13 @@
     <title>글쓰기</title>
 </head>
 <body>
-    <form action="/hackthebox/community/write" method="post">
-        <input type="text" name="title" id="">
-        <input type="text" name="content" id="">
+    <form action="/hackthebox/community/write" method="post" enctype="multipart/form-data">
+        <input type="text" name="title" id="" required>
+        <textarea name="content" id="" required></textarea>
+        <input type="file" name="file" id="attachment"><button type="button" onclick="uploadFiles()">파일 업로드</button>
         <input type="submit" value="submit">
-    </form>    
+    </form>
+    <button onclick="history.back()">취소</button>
 </body>
 </html>
+<% } %>

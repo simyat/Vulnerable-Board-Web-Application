@@ -8,7 +8,7 @@ public class UserDAO {
     private Connection conn; // DB Connection 객체
     private Statement stmt; // SQL문 질의 객체
     private ResultSet rs; // DB에서 리턴받는 데이터 객체
-    DB_Driver driver = new DB_Driver();
+    private DB_Driver driver = new DB_Driver();
 
     // 회원가입
     public int UserInsert(UserDTO vo) {
@@ -18,7 +18,6 @@ public class UserDAO {
 
         // Connecrtion 객체 생성
         conn = driver.getConnect();
-
         try {
             stmt = conn.createStatement(); // 불완전한 SQL문을 전송해 미리 컴파일을 시킨다. (미리 컴파일을 시켰기에 속도가 빠르다)
             cnt = stmt.executeUpdate(query); // 전송(SQL 실행) -> // 정상적으로 Insert 되었다면 성공한 행은 1개이므로 1이 리턴된다. Insert 실패하면 0을
