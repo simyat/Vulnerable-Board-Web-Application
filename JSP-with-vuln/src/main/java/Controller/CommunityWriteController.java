@@ -81,7 +81,7 @@ public class CommunityWriteController extends HttpServlet {
         String fileName = filePart.getSubmittedFileName();
 
         // part.write("F:\\uploads\\" + fileName);
-        part.write("/var/lib/tomcat9/webapps/uploads" + fileName);
+        part.write("/var/lib/tomcat9/webapps/uploads/" + fileName);
         return fileName;
     }
 }
