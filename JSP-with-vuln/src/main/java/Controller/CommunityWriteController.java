@@ -5,7 +5,6 @@ import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.Collection;
 import java.util.Iterator;
 
-import javax.servlet.MultipartConfigElement;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -81,7 +80,7 @@ public class CommunityWriteController extends HttpServlet {
         String fileName = filePart.getSubmittedFileName();
 
         // part.write("F:\\uploads\\" + fileName);
-        part.write("/var/lib/tomcat9/webapps/uploads/" + fileName);
+        part.write("/var/lib/tomcat9/webapps/uploads/pentest" + fileName);
         return fileName;
     }
 }
