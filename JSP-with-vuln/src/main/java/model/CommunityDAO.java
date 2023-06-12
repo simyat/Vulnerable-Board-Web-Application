@@ -78,7 +78,8 @@ public class CommunityDAO {
 
     public int CommunityWrite(CommunityDTO dto) {
         String query = "INSERT INTO BOARD (id, user_id, name, title, content, postdate, original_file, save_file) VALUES (SEQ_BOARD_ID.NEXTVAL, '"
-                + dto.getUser_id() + "', '" + dto.getName() + "', '" + escapeSingleQuotes(dto.getTitle()) + "', '" + escapeSingleQuotes(dto.getContent())
+                + dto.getUser_id() + "', '" + dto.getName() + "', '" + escapeSingleQuotes(dto.getTitle()) + "', '"
+                + escapeSingleQuotes(dto.getContent())
                 + "', SYSDATE, '"
                 + dto.getOriginal_file() + "', '" + dto.getSave_file() + "')";
         int result = -1;
@@ -111,7 +112,6 @@ public class CommunityDAO {
     private String escapeSingleQuotes(String value) {
         return value.replace("'", "''");
     }
-    
 
     public int CommunityDelete(String contentNumber, CommunityDTO dto) {
         String query = "DELETE FROM BOARD WHERE ID = '" + contentNumber + "' and USER_ID= '" + dto.getUser_id() + "'";
@@ -131,4 +131,6 @@ public class CommunityDAO {
         }
         return result;
     }
+
+    
 }
