@@ -61,6 +61,7 @@ public class CommunityDAO {
                 dto.setVisit_count(rs.getInt("visit_count"));
                 dto.setLike_count(rs.getInt("like_count"));
                 dto.setContent(rs.getString("content"));
+                dto.setOriginal_file(rs.getString("original_file"));
                 dto.setSave_file(rs.getString("save_file"));
             }
         } catch (SQLException e) {

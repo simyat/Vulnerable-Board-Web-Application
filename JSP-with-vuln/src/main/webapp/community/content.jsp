@@ -33,7 +33,7 @@
         <%= content.getContent() %>
     </div>
     <div>
-        <%= content.getSave_file() %>
+        <a href="/hackthebox/community/download?file=<%= content.getOriginal_file() %>&id=<%= content.getId() %>">파일 다운로드</a>
     </div>
     <div>
         <% 

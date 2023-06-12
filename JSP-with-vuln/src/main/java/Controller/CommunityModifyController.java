@@ -2,7 +2,9 @@ package Controller;
 
 import java.io.IOException;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.ArrayList;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -10,25 +12,34 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import model.CommunityDAO;
 import model.CommunityDTO;
+import util.FileDriver;
 
 @WebServlet("/community/modify")
+@MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, maxFileSize = 1024 * 1024 * 10, maxRequestSize = 1024 * 1024 * 30)
 public class CommunityModifyController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
-        String title = req.getParameter("title");
-        String content = req.getParameter("content");
-
         HttpSession session = req.getSession();
+        ArrayList<String> fileList = null;
+
         String userId = (String) session.getAttribute("UserId");
         String userName = (String) session.getAttribute("UserName");
+        String title = req.getParameter(req.getPart("title").getName());
+        String content = req.getParameter(req.getPart("content").getName());
+
+        FileDriver fileDriver = new FileDriver();
+        fileList = fileDriver.fileUpload(req);
 
         CommunityDTO dto = new CommunityDTO();
         dto.setUser_id(userId);
         dto.setName(userName);
         dto.setTitle(title);
+        dto.setOriginal_file(fileList.get(0)); // 기존 파일명 저장
         dto.setContent(content);
+        dto.setSave_file(fileList.get(1)); // 새로운 파일명 저장
+
         CommunityDAO dao = new CommunityDAO();
         int id = dao.CommunityWrite(dto);
         if (id > 0) {

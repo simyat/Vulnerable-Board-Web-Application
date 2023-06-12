@@ -23,7 +23,7 @@
     <form action="/hackthebox/community/modify" method="post" enctype="multipart/form-data">
         <input type="text" name="title" placeholder="<%= content.getTitle() %>"  id="" required>
         <textarea name="content" placeholder="<%= content.getContent() %>" id="" required></textarea>
-        <input type="file" name="file" id="attachment"><button type="button" onclick="uploadFiles()">파일 업로드</button>
+        <input type="file" name="file" id="attachment" />
         <input type="submit" value="submit">
     </form>    
     <button onclick="history.back()">취소</button>
