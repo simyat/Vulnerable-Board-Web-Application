@@ -15,6 +15,8 @@ public class FileDAO {
 
     public FileDTO getSaveFileNameFromDatabase(String originalFileName) {
         String query = "SELECT SAVE_FILE FROM BOARD WHERE ORIGINAL_FILE ='" + originalFileName + "'";
+        // String query = "SELECT SAVE_FILE FROM BOARD WHERE ID ='" + contentNumber + "'";
+
         FileDTO dto = new FileDTO();
         conn = driver.getConnect();
         try {
