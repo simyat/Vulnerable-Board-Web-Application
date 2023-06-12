@@ -77,11 +77,11 @@ public class CommunityDAO {
     }
 
     public int CommunityWrite(CommunityDTO dto) {
-        String query = "INSERT INTO BOARD (id, user_id, name, title, content, postdate, original_file, save_file) VALUES (SEQ_BOARD_ID.NEXTVAL, '"
+        String query = "INSERT INTO BOARD (id, user_id, name, title, content, postdate, original_file) VALUES (SEQ_BOARD_ID.NEXTVAL, '"
                 + dto.getUser_id() + "', '" + dto.getName() + "', '" + escapeSingleQuotes(dto.getTitle()) + "', '"
                 + escapeSingleQuotes(dto.getContent())
                 + "', SYSDATE, '"
-                + dto.getOriginal_file() + "', '" + dto.getSave_file() + "')";
+                + dto.getOriginal_file() + "')";
         int result = -1;
         conn = driver.getConnect();
         try {

@@ -38,7 +38,6 @@ public class CommunityWriteController extends HttpServlet {
         dto.setTitle(title);
         dto.setOriginal_file(fileList.get(0)); // 기존 파일명 저장
         dto.setContent(content);
-        dto.setSave_file(fileList.get(1)); // 새로운 파일명 저장
 
         CommunityDAO dao = new CommunityDAO();
         int id = dao.CommunityWrite(dto);

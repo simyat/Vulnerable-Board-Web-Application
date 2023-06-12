@@ -7,10 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,31 +30,20 @@ public class FileDriver {
 
         Part part = req.getPart("file");
         String fileName = part.getSubmittedFileName();
-
         part.write(uploadFilePath + File.separator + fileName);
-        String now = new SimpleDateFormat("yyyyMMdd_HHmm").format(new Date());
-        String ext = fileName.substring(fileName.lastIndexOf("."));
-        String newFileName = now + ext;
-
-        // 파일명 변경
-        File oldFile = new File(uploadFilePath + File.separator + fileName);
-        File newFile = new File(uploadFilePath + File.separator + newFileName);
-        oldFile.renameTo(newFile);
-
+        
         ArrayList<String> fileList = new ArrayList<String>();
         fileList.add(fileName);
-        fileList.add(newFileName);
-
         return fileList;
     }
 
-    public void fileDownload(HttpServletRequest req, HttpServletResponse resp, String originalFileName, String saveFileName) throws IOException {
+    public void fileDownload(HttpServletRequest req, HttpServletResponse resp, String originalFileName) throws IOException {
         String applicationPath = req.getServletContext().getRealPath("");
         String uploadFilePath = applicationPath + UPLOAD_DIR;
 
         try {
             // 파일을 찾아 입력 스트림 생성
-            File file = new File(uploadFilePath, saveFileName);
+            File file = new File(uploadFilePath, originalFileName);
             InputStream inputStream = new FileInputStream(file);
 
             // 한글 파일명 깨짐 방지
