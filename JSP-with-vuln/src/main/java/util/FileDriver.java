@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
-public class FileDriver extends HttpServlet{
+public class FileDriver extends HttpServlet {
     // "/var/lib/tomcat9/webapps/uploads/" -> linux dir
     private static final String UPLOAD_DIR = "uploads";
 
@@ -30,24 +30,26 @@ public class FileDriver extends HttpServlet{
         }
 
         Part part = req.getPart("file");
+
+        // 확장자 검증
         String fileName = part.getSubmittedFileName();
-        if (fileName.equals("jsp") && fileName.equals("jspf")) {
+        String ext = fileName.substring(fileName.lastIndexOf("."));
+        if (ext.equals("jsp") || ext.equals("jspf")) {
             resp.setCharacterEncoding("UTF-8");
             resp.setContentType("text/html;charset=UTF-8");
             PrintWriter out = resp.getWriter();
             out.println("<script>alert('업로드 할 수 없는 확장자입니다.');history.back(-1);</script>");
         } else {
-            
+            part.write(uploadFilePath + File.separator + fileName);
         }
 
-        part.write(uploadFilePath + File.separator + fileName);
-        
         ArrayList<String> fileList = new ArrayList<String>();
         fileList.add(fileName);
         return fileList;
     }
 
-    public void fileDownload(HttpServletRequest req, HttpServletResponse resp, String originalFileName) throws IOException {
+    public void fileDownload(HttpServletRequest req, HttpServletResponse resp, String originalFileName)
+            throws IOException {
         String applicationPath = req.getServletContext().getRealPath("");
         String uploadFilePath = applicationPath + UPLOAD_DIR;
 
