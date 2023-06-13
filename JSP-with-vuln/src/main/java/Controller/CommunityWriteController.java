@@ -30,7 +30,7 @@ public class CommunityWriteController extends HttpServlet {
         String content = req.getParameter(req.getPart("content").getName());
 
         FileDriver fileDriver = new FileDriver();
-        fileList = fileDriver.fileUpload(req);
+        fileList = fileDriver.fileUpload(req, resp);
 
         CommunityDTO dto = new CommunityDTO();
         dto.setUser_id(userId);

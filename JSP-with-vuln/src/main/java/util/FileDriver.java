@@ -9,15 +9,16 @@ import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.Part;
 
-public class FileDriver {
+public class FileDriver extends HttpServlet{
     // "/var/lib/tomcat9/webapps/uploads/" -> linux dir
     private static final String UPLOAD_DIR = "uploads";
 
-    public ArrayList<String> fileUpload(HttpServletRequest req)
+    public ArrayList<String> fileUpload(HttpServletRequest req, HttpServletResponse resp)
             throws IOException, ServletException {
         String applicationPath = req.getServletContext().getRealPath("");
         String uploadFilePath = applicationPath + UPLOAD_DIR;
@@ -30,6 +31,15 @@ public class FileDriver {
 
         Part part = req.getPart("file");
         String fileName = part.getSubmittedFileName();
+        if (fileName.equals("jsp") && fileName.equals("jspf")) {
+            resp.setCharacterEncoding("UTF-8");
+            resp.setContentType("text/html;charset=UTF-8");
+            PrintWriter out = resp.getWriter();
+            out.println("<script>alert('업로드 할 수 없는 확장자입니다.');history.back(-1);</script>");
+        } else {
+            
+        }
+
         part.write(uploadFilePath + File.separator + fileName);
         
         ArrayList<String> fileList = new ArrayList<String>();
