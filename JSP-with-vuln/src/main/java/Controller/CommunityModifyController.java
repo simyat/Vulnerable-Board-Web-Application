@@ -1,21 +1,19 @@
 package Controller;
 
 import java.io.IOException;
-
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
 import model.CommunityDAO;
 import model.CommunityDTO;
 
 @WebServlet("/community/modify")
 @MultipartConfig(fileSizeThreshold = 1024 * 1024 * 2, maxFileSize = 1024 * 1024 * 10, maxRequestSize = 1024 * 1024 * 30)
 public class CommunityModifyController extends CommunityWriteController {
-    
+
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         super.doPost(req, resp);
@@ -35,6 +33,5 @@ public class CommunityModifyController extends CommunityWriteController {
         } else {
             req.getRequestDispatcher("../api/login.jsp").forward(req, resp);
         }
-
     }
 }

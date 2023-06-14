@@ -23,6 +23,7 @@ public class FileDriver extends HttpServlet {
         String applicationPath = req.getServletContext().getRealPath("");
         String uploadFilePath = applicationPath + UPLOAD_DIR;
         File fileSaveDir = new File(uploadFilePath);
+        ArrayList<String> fileList = new ArrayList<String>();
 
         // 파일 경로 없으면 생성
         if (!fileSaveDir.exists()) {
@@ -33,18 +34,19 @@ public class FileDriver extends HttpServlet {
 
         // 확장자 검증
         String fileName = part.getSubmittedFileName();
-        String ext = fileName.substring(fileName.lastIndexOf("."));
-        if (ext.equals("jsp") || ext.equals("jspf")) {
-            resp.setCharacterEncoding("UTF-8");
-            resp.setContentType("text/html;charset=UTF-8");
-            PrintWriter out = resp.getWriter();
-            out.println("<script>alert('업로드 할 수 없는 확장자입니다.');history.back(-1);</script>");
-        } else {
-            part.write(uploadFilePath + File.separator + fileName);
+        String[] filter = { "jsp", "jspf" };
+        boolean ext = false;
+        for (String check : filter) {
+            ext = fileName.contains(check);
+            if (ext) {
+                break;
+            }
         }
-
-        ArrayList<String> fileList = new ArrayList<String>();
-        fileList.add(fileName);
+        // 파일 업로드
+        if (!ext) {
+            part.write(uploadFilePath + File.separator + fileName);
+            fileList.add(fileName);
+        }
         return fileList;
     }
 

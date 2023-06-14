@@ -1,6 +1,7 @@
 package Controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import javax.servlet.RequestDispatcher;
@@ -22,23 +23,33 @@ public class CommunityWriteController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
         HttpSession session = req.getSession();
-        ArrayList<String> fileList = null;
 
         String userId = (String) session.getAttribute("UserId");
         String userName = (String) session.getAttribute("UserName");
         String title = req.getParameter(req.getPart("title").getName());
         String content = req.getParameter(req.getPart("content").getName());
 
-        FileDriver fileDriver = new FileDriver();
-        fileList = fileDriver.fileUpload(req, resp);
-
         CommunityDTO dto = new CommunityDTO();
         dto.setUser_id(userId);
         dto.setName(userName);
         dto.setTitle(title);
-        dto.setOriginal_file(fileList.get(0)); // 기존 파일명 저장
         dto.setContent(content);
 
+        FileDriver fileDriver = new FileDriver();
+        ArrayList<String> fileList = fileDriver.fileUpload(req, resp);
+        if (fileList.size() > 0) {
+            dto.setOriginal_file(fileList.get(0));
+            daoWrite(req, resp, dto);
+        } else {
+            resp.setCharacterEncoding("UTF-8");
+            resp.setContentType("text/html;charset=UTF-8");
+            PrintWriter out = resp.getWriter();
+            out.println("<script>alert('업로드 할 수 없는 확장자입니다.');history.back(-1);</script>");
+        }
+    }
+
+    private void daoWrite(HttpServletRequest req, HttpServletResponse resp, CommunityDTO dto)
+            throws IOException, ServletException {
         CommunityDAO dao = new CommunityDAO();
         int id = dao.CommunityWrite(dto);
         if (id > 0) {
