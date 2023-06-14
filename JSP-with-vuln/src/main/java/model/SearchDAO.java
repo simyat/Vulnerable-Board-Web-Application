@@ -5,7 +5,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-
 import util.DB_Driver;
 
 public class SearchDAO {
@@ -19,7 +18,7 @@ public class SearchDAO {
         ArrayList<CommunityDTO> list = new ArrayList<CommunityDTO>();
         conn = driver.getConnect();
         try {
-            String query = searchBy(dto);
+            String query = SearchByConditions(dto);
             stmt = conn.createStatement();
             rs = stmt.executeQuery(query);
             while (rs.next()) {
@@ -44,9 +43,33 @@ public class SearchDAO {
         return list;
     }
 
-    // 제목, 작성자, 내용, 정렬(최신, 제목, 작성자, 좋아요) 별로 검색
-    private String searchBy(SearchDTO dto) {
+    // 검색 조건
+    private String SearchByConditions(SearchDTO dto) {
         String query = null;
+        if (dto.getCurrentSearchBy() != null) {
+            query = CurrentSearchBy(dto, query);
+        } else if (dto.getCurrentSearchOrdeyBy() != null) {
+            query = CurrentSearchOrdeyBy(dto, query);
+        }
+        return query;
+    }
+
+    // 정렬(최신, 제목, 작성자, 좋아요) 검색
+    private String CurrentSearchOrdeyBy(SearchDTO dto, String query) {
+        if (dto.getCurrentSearchOrdeyBy().equals("recent")) {
+            query = "SELECT * FROM BOARD ORDER BY POSTDATE DESC";
+        } else if (dto.getCurrentSearchOrdeyBy().equals("title")) {
+            query = "SELECT * FROM BOARD ORDER BY TITLE ASC";
+        } else if (dto.getCurrentSearchOrdeyBy().equals("author")) {
+            query = "SELECT * FROM BOARD ORDER BY NAME ASC";
+        } else if (dto.getCurrentSearchOrdeyBy().equals("recommend")) {
+            query = "SELECT * FROM BOARD ORDER BY LIKE_COUNT DESC";
+        }
+        return query;
+    }
+
+    // 제목, 작성자, 내용 검색
+    private String CurrentSearchBy(SearchDTO dto, String query) {
         if (dto.getCurrentSearchBy().equals("posts")) {
             if (!dto.getCurrentSearchDate().isEmpty()) {
                 query = "SELECT * FROM BOARD WHERE LOWER(CONTENT) LIKE LOWER('%" + dto.getKeywords() + "%')" +
@@ -59,23 +82,15 @@ public class SearchDAO {
                 query = "SELECT * FROM BOARD WHERE LOWER(TITLE) LIKE LOWER('%" + dto.getKeywords() + "%')" +
                         "AND TRUNC(POSTDATE) = TO_DATE('" + dto.getCurrentSearchDate() + "', 'YYYY-MM-DD')";
             } else {
-                query = "SELECT * FROM BOARD WHERE LOWER(TITLE) = LOWER('" + dto.getKeywords() + "')";
+                query = "SELECT * FROM BOARD WHERE LOWER(TITLE) LIKE LOWER('%" + dto.getKeywords() + "%')";
             }
         } else if (dto.getCurrentSearchBy().equals("author")) {
             if (!dto.getCurrentSearchDate().isEmpty()) {
                 query = "SELECT * FROM BOARD WHERE LOWER(NAME) LIKE LOWER('%" + dto.getKeywords() + "%')" +
                         "AND TRUNC(POSTDATE) = TO_DATE('" + dto.getCurrentSearchDate() + "', 'YYYY-MM-DD')";
             } else {
-                query = "SELECT * FROM BOARD WHERE LOWER(NAME) = '" + dto.getKeywords() + "'";
+                query = "SELECT * FROM BOARD WHERE LOWER(NAME) LIKE LOWER('%" + dto.getKeywords() + "%')";
             }
-        } else if (dto.getCurrentSearchOrdeyBy().equals("recent")) {
-            query = "SELECT * FROM BOARD ORDER BY POSTDATE DESC";
-        } else if (dto.getCurrentSearchOrdeyBy().equals("title")) {
-            query = "SELECT * FROM BOARD ORDER BY TITLE ASC";
-        } else if (dto.getCurrentSearchOrdeyBy().equals("author")) {
-            query = "SELECT * FROM BOARD ORDER BY NAME ASC";
-        } else if (dto.getCurrentSearchOrdeyBy().equals("recommend")) {
-            query = "SELECT * FROM BOARD ORDER BY LIKE_COUNT DESC";
         }
         return query;
     }

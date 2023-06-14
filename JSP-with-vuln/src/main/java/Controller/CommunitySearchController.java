@@ -1,6 +1,7 @@
 package Controller;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
@@ -19,21 +20,34 @@ public class CommunitySearchController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String search = req.getParameter("search");
-        String date = req.getParameter("date");
+        SearchDTO dto = new SearchDTO();
+
         String filter = req.getParameter("filter");
         String order = req.getParameter("order");
 
-        SearchDTO dto = new SearchDTO();
-        dto.setKeywords(search);
-        dto.setCurrentSearchBy(filter);     
-        dto.setCurrentSearchDate(date);
-        dto.setCurrentSearchOrdeyBy(order);  
+        if (filter != null) {
+            dto.setCurrentSearchBy(filter);
+            dto.setKeywords(req.getParameter("search"));
+            dto.setCurrentSearchDate(req.getParameter("date"));
+            daoSearch(req, resp, dto);
+        } else if (order != null) {
+            dto.setCurrentSearchOrdeyBy(order);
+            daoSearch(req, resp, dto);
+        } 
+        // else {
+        //     resp.setCharacterEncoding("UTF-8");
+        //     resp.setContentType("text/html;charset=UTF-8");
+        //     PrintWriter out = resp.getWriter();
+        //     out.println("<script>alert('잘못된 요청입니다.');history.back(-1);</script>");
+        // }
+    }
 
+    private void daoSearch(HttpServletRequest req, HttpServletResponse resp, SearchDTO dto)
+            throws ServletException, IOException {
         SearchDAO dao = new SearchDAO();
-        ArrayList<CommunityDTO> communitySearch = dao.CommunitySearch(dto);              
+        ArrayList<CommunityDTO> communitySearch = dao.CommunitySearch(dto);
         req.setAttribute("CommunityList", communitySearch);
         RequestDispatcher rd = req.getRequestDispatcher("./community.jsp");
-        rd.forward(req, resp);       
+        rd.forward(req, resp);
     }
 }
