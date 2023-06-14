@@ -14,6 +14,7 @@ public class SearchDAO {
     private ResultSet rs;
     private DB_Driver driver = new DB_Driver();
 
+    // 검색 결과 DTO에 담아서 리턴
     public ArrayList<CommunityDTO> CommunitySearch(SearchDTO dto) {
         ArrayList<CommunityDTO> list = new ArrayList<CommunityDTO>();
         conn = driver.getConnect();
@@ -43,6 +44,7 @@ public class SearchDAO {
         return list;
     }
 
+    // 제목, 작성자, 내용, 정렬(최신, 제목, 작성자, 좋아요) 별로 검색
     private String searchBy(SearchDTO dto) {
         String query = null;
         if (dto.getCurrentSearchBy().equals("posts")) {
@@ -66,6 +68,14 @@ public class SearchDAO {
             } else {
                 query = "SELECT * FROM BOARD WHERE LOWER(NAME) = '" + dto.getKeywords() + "'";
             }
+        } else if (dto.getCurrentSearchOrdeyBy().equals("recent")) {
+            query = "SELECT * FROM BOARD ORDER BY POSTDATE DESC";
+        } else if (dto.getCurrentSearchOrdeyBy().equals("title")) {
+            query = "SELECT * FROM BOARD ORDER BY TITLE ASC";
+        } else if (dto.getCurrentSearchOrdeyBy().equals("author")) {
+            query = "SELECT * FROM BOARD ORDER BY NAME ASC";
+        } else if (dto.getCurrentSearchOrdeyBy().equals("recommend")) {
+            query = "SELECT * FROM BOARD ORDER BY LIKE_COUNT DESC";
         }
         return query;
     }
