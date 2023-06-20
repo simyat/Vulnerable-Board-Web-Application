@@ -10,4 +10,12 @@
       <secure>false</secure>
     </cookie-config>
   </session-config>
+  <context-param>
+    <param-name>POSTS_PER_PAGE</param-name> <!--게시물 개수-->
+    <param-value>10</param-value>
+  </context-param>
+  <context-param>
+    <param-name>PAGES_PER_BLOCK</param-name> <!--한 화면에 출력할 페이지 번호 개수-->
+    <param-value>5</param-value>
+  </context-param>
 </web-app>

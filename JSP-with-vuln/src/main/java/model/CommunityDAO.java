@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class CommunityDAO {
     private Connection conn;
@@ -13,10 +14,76 @@ public class CommunityDAO {
     private ResultSet rs;
     private DB_Driver driver = new DB_Driver();
 
-    // 게시글 목록 가져오기
-    public ArrayList<CommunityDTO> CommunityList() {
-        String query = "SELECT * FROM BOARD ORDER BY ID DESC";
+    // 게시글 목록 개수 반환
+    public int CommunityListCount() {
+        int communityListCount = 0;
+        String query = "SELECT COUNT(*) FROM BOARD";
+        conn = driver.getConnect();
+        try {
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery(query);
+            rs.next(); 
+            communityListCount = rs.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            driver.dbClose(rs, stmt, conn);
+        }
+        return communityListCount;
+    }
+
+    // 검색 조건 없을 시 페이징
+    public ArrayList<CommunityDTO> CommunityListPage(Map<String, Object> map) {
         ArrayList<CommunityDTO> list = new ArrayList<CommunityDTO>();
+        String query = " SELECT * FROM ( " +
+                " SELECT Tb.*, ROWNUM rNum FROM ( " +
+                " SELECT * FROM BOARD ORDER BY ID DESC " +
+                " ) Tb " +
+                " ) " +
+                " WHERE rNum BETWEEN '" + map.get("start").toString() + "' and '" + map.get("end").toString() + "'";
+
+        conn = driver.getConnect();
+        try {
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery(query);
+
+            while (rs.next()) {
+                CommunityDTO dto = new CommunityDTO();
+                dto.setId(rs.getInt("id"));
+                dto.setName(rs.getString("name"));
+                dto.setTitle(rs.getString("title"));
+                dto.setPostdate(rs.getString("postdate"));
+                dto.setVisit_count(rs.getInt("visit_count"));
+                dto.setLike_count(rs.getInt("like_count"));
+                list.add(dto);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            driver.dbClose(rs, stmt, conn);
+        }
+        return list;
+
+    }
+
+    //검색 조건이 있다면 SearchDAO Query 추가해 검색한 뒤, 페이징
+    public ArrayList<CommunityDTO> CommunityListPage(Map<String, Object> map, String searchQuery) {
+        ArrayList<CommunityDTO> list = new ArrayList<CommunityDTO>();
+        String query = " SELECT * FROM ( " +
+                " SELECT Tb.*, ROWNUM rNum FROM ( "
+                + searchQuery +
+                " ) Tb " +
+                " ) " +
+                " WHERE rNum BETWEEN '" + map.get("start").toString() + "' and '" + map.get("end").toString() + "'";
+
         conn = driver.getConnect();
         try {
             stmt = conn.createStatement();
@@ -76,6 +143,23 @@ public class CommunityDAO {
         return dto;
     }
 
+    public void UpdateVisitCount(String contentNumber) {
+        String query = "UPDATE BOARD SET " + " visit_count=visit_count+1 " + " WHERE id='" + contentNumber + "'";
+        conn = driver.getConnect();
+        try {
+            stmt = conn.createStatement();
+            stmt.executeQuery(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            driver.dbClose(stmt, conn);
+        }
+    }
+
     public int CommunityWrite(CommunityDTO dto) {
         String query = "INSERT INTO BOARD (id, user_id, name, title, content, postdate, original_file) VALUES (SEQ_BOARD_ID.NEXTVAL, '"
                 + dto.getUser_id() + "', '" + dto.getName() + "', '" + escapeSingleQuotes(dto.getTitle()) + "', '"
@@ -132,5 +216,4 @@ public class CommunityDAO {
         return result;
     }
 
-    
 }

@@ -17,6 +17,7 @@ public class CommunityPostsController extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String postsId = req.getParameter("id");
         CommunityDAO dao = new CommunityDAO();
+        dao.UpdateVisitCount(postsId);
         CommunityDTO content = dao.CommunityContent(postsId);
         req.setAttribute("content", content);
         req.getRequestDispatcher("./content.jsp").forward(req, resp);

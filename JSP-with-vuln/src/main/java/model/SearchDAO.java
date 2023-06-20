@@ -13,23 +13,23 @@ public class SearchDAO {
     private ResultSet rs;
     private DB_Driver driver = new DB_Driver();
 
-    // 검색 결과 DTO에 담아서 리턴
-    public ArrayList<CommunityDTO> CommunitySearch(SearchDTO dto) {
-        ArrayList<CommunityDTO> list = new ArrayList<CommunityDTO>();
+    public String CommunitySearchQuery(SearchDTO dto){
+        String query = SearchByConditions(dto);
+        return query;
+    }
+
+    // 검색 조건에 맞는 게시물 개수 반환
+    public int CommunitySearchCount(SearchDTO dto) {
+        int searchCount = 0;
         conn = driver.getConnect();
+        ArrayList<Integer> size = new ArrayList<>();
+
         try {
             String query = SearchByConditions(dto);
             stmt = conn.createStatement();
             rs = stmt.executeQuery(query);
             while (rs.next()) {
-                CommunityDTO communityDTO = new CommunityDTO();
-                communityDTO.setId(rs.getInt("id"));
-                communityDTO.setName(rs.getString("name"));
-                communityDTO.setTitle(rs.getString("title"));
-                communityDTO.setPostdate(rs.getString("postdate"));
-                communityDTO.setVisit_count(rs.getInt("visit_count"));
-                communityDTO.setLike_count(rs.getInt("like_count"));
-                list.add(communityDTO);
+                size.add(rs.getInt(1));
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -40,7 +40,8 @@ public class SearchDAO {
         } finally {
             driver.dbClose(rs, stmt, conn);
         }
-        return list;
+        searchCount = size.size(); // 리스트에 담은 게시물 개수 반환 
+        return searchCount; // 게시물 개수 서블릿으로 반환
     }
 
     // 검색 조건

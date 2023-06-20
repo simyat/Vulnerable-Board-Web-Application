@@ -51,19 +51,24 @@ public class CommunityWriteController extends HttpServlet {
     private void daoWrite(HttpServletRequest req, HttpServletResponse resp, CommunityDTO dto)
             throws IOException, ServletException {
         CommunityDAO dao = new CommunityDAO();
-        int id = dao.CommunityWrite(dto);
-        if (id > 0) {
-            resp.sendRedirect("/hackthebox/community/posts?id=" + id);
-        } else {
-            try {
-                // 권한없는 사용자가 작성 시 예외 발생
-                throw new SQLIntegrityConstraintViolationException();
-            } catch (SQLIntegrityConstraintViolationException e) {
-                req.setAttribute("Not_Access", "parent key not found");
-                req.getRequestDispatcher("./community.jsp").forward(req, resp);
-                e.printStackTrace();
-            } // 작성 실패 시 어떻게 처리할지 고민중..
+        int tempId = 0;
+        for (int i=1; i<=60; i++){
+            dto.setTitle("페이징 테스트 - "+i);
+            tempId = dao.CommunityWrite(dto);
         }
+        // int id = dao.CommunityWrite(dto);
+        // if (id > 0) {
+        //     resp.sendRedirect("/hackthebox/community/posts?id=" + id);
+        // } else {
+        //     try {
+        //         // 권한없는 사용자가 작성 시 예외 발생
+        //         throw new SQLIntegrityConstraintViolationException();
+        //     } catch (SQLIntegrityConstraintViolationException e) {
+        //         req.setAttribute("Not_Access", "parent key not found");
+        //         req.getRequestDispatcher("./community.jsp").forward(req, resp);
+        //         e.printStackTrace();
+        //     } // 작성 실패 시 어떻게 처리할지 고민중..
+        // }
     }
 
     // 작성 권한 없는 사용자가 접근 시 로그인 페이지로 이동한다.
