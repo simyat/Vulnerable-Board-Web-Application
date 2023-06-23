@@ -27,16 +27,16 @@ public class CTF_Controller extends HttpServlet {
             HttpSession session = req.getSession();
             session.setAttribute("sessionId", vo.getUser_id());
             session.setAttribute("userName", vo.getName());
-            req.getRequestDispatcher("bypass/login_success.jsp").forward(req, resp);
+            req.getRequestDispatcher("CTF/CTF_flag.jsp").forward(req, resp);
         } else {
-            req.getRequestDispatcher("bypass/login_bypass.jsp").forward(req, resp);
+            req.getRequestDispatcher("CTF/CTF.jsp").forward(req, resp);
         }
 
         HttpSession loguoutsession = req.getSession();
         String id = loguoutsession.getId();
         if (id != null) {
             loguoutsession.invalidate();
-            req.getRequestDispatcher("bypass/login_bypass.jsp").forward(req, resp);
+            req.getRequestDispatcher("CTF/CTF.jsp").forward(req, resp);
         }
     }
 }
