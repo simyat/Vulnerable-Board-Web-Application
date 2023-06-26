@@ -21,8 +21,9 @@
 </head>
 <body>
     <form action="/hackthebox/community/modify" method="post" enctype="multipart/form-data">
-        <input type="text" name="title" placeholder="<%= content.getTitle() %>"  id="" required>
-        <textarea name="content" placeholder="<%= content.getContent() %>" id="" required></textarea>
+        <input type="hidden" name="postId" value="<%= content.getId() %>">
+        <input type="text" name="title" value="<%= content.getTitle() %>" required>
+        <textarea name="content" required><%= content.getContent() %></textarea>
         <input type="file" name="file" id="attachment" />
         <input type="submit" value="submit">
     </form>    

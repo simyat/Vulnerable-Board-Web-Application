@@ -63,25 +63,25 @@
             <tbody>
                 <%
                 ArrayList<CommunityDTO> list = (ArrayList<CommunityDTO>) request.getAttribute("CommunityLists");
-                if(list == null) {
+                if(list.size() > 0) {
+                    for (CommunityDTO dto : list) {
                 %>        
-                        <tr>
-                            <td colspan="5" align="center">등록된 게시물이 없습니다.</td>
-                        </tr>
+                    <tr align="center">
+                        <td><a href="/hackthebox/community/posts?id=<%= dto.getId() %>"><%= dto.getTitle() %></a></td>
+                        <td><%= dto.getName() %></td>
+                        <td><%= dto.getPostdate() %></td>
+                        <td><%= dto.getVisit_count() %></td>
+                        <td><%= dto.getLike_count() %></td>
+                    </tr>
                 <%
-                    } else {
-                            for (CommunityDTO dto : list) {
-                %>
-                            <tr align="center">
-                                <td><a href="/hackthebox/community/posts?id=<%= dto.getId() %>"><%= dto.getTitle() %></a></td>
-                                <td><%= dto.getName() %></td>
-                                <td><%= dto.getPostdate() %></td>
-                                <td><%= dto.getVisit_count() %></td>
-                                <td><%= dto.getLike_count() %></td>
-                            </tr>
-                <%
-                        }
                     }
+                } else {
+                %>
+                    <tr>
+                        <td colspan="5" align="center">등록된 게시물이 없습니다.</td>
+                    </tr>
+                <%
+                }
                 %>
             </tbody>
         </table>

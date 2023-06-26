@@ -34,10 +34,13 @@ public class CommunitySearchController extends HttpServlet {
             dto.setCurrentSearchBy(filter);
             dto.setKeywords(req.getParameter("search"));
             dto.setCurrentSearchDate(req.getParameter("date"));
-            daoSearch(req, resp, dto);
+            String url = "search?date=" + dto.getCurrentSearchDate() + "&filter=" + dto.getCurrentSearchBy() + "&search="
+                    + dto.getKeywords() + "&";
+            daoSearch(req, resp, dto, url);
         } else if (order != null) {
             dto.setCurrentSearchOrdeyBy(order);
-            daoSearch(req, resp, dto);
+            String url = "search?order=" + dto.getCurrentSearchOrdeyBy() + "&";
+            daoSearch(req, resp, dto, url);
         }
         // filter, order 값 없을 경우 어떻게 처리해야할까?? 아래 코드로 작성하니 에러 발생.
         // else {
@@ -48,7 +51,7 @@ public class CommunitySearchController extends HttpServlet {
         // }
     }
 
-    private void daoSearch(HttpServletRequest req, HttpServletResponse resp, SearchDTO dto)
+    private void daoSearch(HttpServletRequest req, HttpServletResponse resp, SearchDTO dto, String url)
             throws ServletException, IOException {
         SearchDAO searchDAO = new SearchDAO();
         CommunityDAO dao = new CommunityDAO();
@@ -78,10 +81,11 @@ public class CommunitySearchController extends HttpServlet {
         // 페이지 처리 끝
 
         ArrayList<CommunityDTO> CommunityLists = dao.CommunityListPage(map, query); // 게시물 목록 받기
-
-        // View에 전달할 매개변수 추가
+        
+        // 페이징 처리
         String paging = BoardPage.pagingStr(listCount, pageSize,
-                blockPage, page, "community");
+                blockPage, page, url);
+
         // 페이징 영역 HTML 문자열
         map.put("paging", paging);
         map.put("listCount", listCount);

@@ -11,9 +11,9 @@ public class BoardPage {
         // '이전 페이지 블록 바로가기' 출력
         int pageTemp = (((pageNum - 1) / blockPage) * blockPage) + 1;
         if (pageTemp != 1) {
-            pagingStr += "<a href='" + reqUrl + "?page=1'>[첫 페이지]</a>";
+            pagingStr += "<a href='" + reqUrl + "page=1'>[첫 페이지]</a>";
             pagingStr += "&nbsp;";
-            pagingStr += "<a href='" + reqUrl + "?page=" + (pageTemp - 1)
+            pagingStr += "<a href='" + reqUrl + "page=" + (pageTemp - 1)
                     + "'>[이전 페이지]</a>";
         }
 
@@ -24,7 +24,7 @@ public class BoardPage {
                 // 현재 페이지는 링크를 걸지 않음
                 pagingStr += "&nbsp;" + pageTemp + "&nbsp;";
             } else {
-                pagingStr += "&nbsp;<a href='" + reqUrl + "?page=" + pageTemp
+                pagingStr += "&nbsp;<a href='" + reqUrl + "page=" + pageTemp
                         + "'>" + pageTemp + "</a>&nbsp;";
             }
             pageTemp++;
@@ -33,10 +33,10 @@ public class BoardPage {
 
         // '다음 페이지 블록 바로가기' 출력
         if (pageTemp <= totalPages) {
-            pagingStr += "<a href='" + reqUrl + "?page=" + pageTemp
+            pagingStr += "<a href='" + reqUrl + "page=" + pageTemp
                     + "'>[다음 페이지]</a>";
             pagingStr += "&nbsp;";
-            pagingStr += "<a href='" + reqUrl + "?page=" + totalPages
+            pagingStr += "<a href='" + reqUrl + "page=" + totalPages
                     + "'>[마지막 페이지]</a>";
         }
 

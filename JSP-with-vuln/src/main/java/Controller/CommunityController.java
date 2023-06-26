@@ -54,13 +54,12 @@ public class CommunityController extends HttpServlet {
 
             // View에 전달할 매개변수 추가
             String paging = BoardPage.pagingStr(listCount, pageSize,
-                    blockPage, page, "community");
+                    blockPage, page, "community?");
             // 페이징 영역 HTML 문자열
             map.put("paging", paging);
             map.put("listCount", listCount);
             map.put("pageSize", pageSize);
             map.put("page", page);
-
 
             req.setAttribute("CommunityLists", CommunityLists);
             req.setAttribute("map", map);

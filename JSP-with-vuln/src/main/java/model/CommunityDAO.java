@@ -41,7 +41,7 @@ public class CommunityDAO {
         ArrayList<CommunityDTO> list = new ArrayList<CommunityDTO>();
         String query = " SELECT * FROM ( " +
                 " SELECT Tb.*, ROWNUM rNum FROM ( " +
-                " SELECT * FROM BOARD ORDER BY ID DESC " +
+                " SELECT * FROM BOARD ORDER BY POSTDATE DESC " +
                 " ) Tb " +
                 " ) " +
                 " WHERE rNum BETWEEN '" + map.get("start").toString() + "' and '" + map.get("end").toString() + "'";
@@ -112,8 +112,8 @@ public class CommunityDAO {
     }
 
     // 게시글 상세정보 가져오기
-    public CommunityDTO CommunityContent(String contentNumber) {
-        String query = "SELECT * FROM BOARD WHERE ID='" + contentNumber + "'";
+    public CommunityDTO CommunityContent(String postId) {
+        String query = "SELECT * FROM BOARD WHERE ID='" + postId + "'";
         CommunityDTO dto = null;
         conn = driver.getConnect();
         try {
@@ -160,11 +160,36 @@ public class CommunityDAO {
         }
     }
 
+    public int CommunityModify(CommunityDTO dto) {
+        String query = "UPDATE BOARD SET user_id='"+ dto.getUser_id() +"', name='" + dto.getName() + "', title='" 
+        + escapeSingleQuotes(dto.getTitle()) + "', content='" + escapeSingleQuotes(dto.getContent())
+                + "', postdate=SYSDATE, original_file='" + dto.getOriginal_file() + "' WHERE id='" + dto.getId() + "'";
+        int result = -1;
+        int postId = -1;
+        conn = driver.getConnect();
+        try {
+            stmt = conn.createStatement();
+            result = stmt.executeUpdate(query);
+            if (result > 0) {
+                // 작성한 글 ID 가져오기
+                postId = dto.getId();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            driver.dbClose(stmt, conn);
+        }
+        return postId;
+    }
+
     public int CommunityWrite(CommunityDTO dto) {
         String query = "INSERT INTO BOARD (id, user_id, name, title, content, postdate, original_file) VALUES (SEQ_BOARD_ID.NEXTVAL, '"
                 + dto.getUser_id() + "', '" + dto.getName() + "', '" + escapeSingleQuotes(dto.getTitle()) + "', '"
-                + escapeSingleQuotes(dto.getContent())
-                + "', SYSDATE, '"
+                + escapeSingleQuotes(dto.getContent()) + "', SYSDATE, '"
                 + dto.getOriginal_file() + "')";
         int result = -1;
         conn = driver.getConnect();
@@ -172,7 +197,7 @@ public class CommunityDAO {
             stmt = conn.createStatement();
             result = stmt.executeUpdate(query);
             if (result > 0) {
-                // 작성한 글 ID 가져오기
+                // 작성한 최신 글 ID 가져오기
                 query = "SELECT ID FROM (SELECT id FROM BOARD WHERE USER_ID='" + dto.getUser_id()
                         + "' ORDER BY ID DESC) WHERE ROWNUM=1";
                 stmt = conn.createStatement();

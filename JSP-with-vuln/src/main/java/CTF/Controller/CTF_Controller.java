@@ -21,8 +21,8 @@ public class CTF_Controller extends HttpServlet {
         String password = req.getParameter("Password");
 
         CTF_DAO dao = new CTF_DAO();
-        UserDTO vo = dao.IdentifyAuth(userId, password);
-        // UserVO vo = dao.SeparateIdentifyAuth(userId, password);
+        // UserDTO vo = dao.IdentifyAuth(userId, password);
+        UserDTO vo = dao.SeparateIdentifyAuth(userId, password);
         if (vo.getUser_id() != null) {
             HttpSession session = req.getSession();
             session.setAttribute("sessionId", vo.getUser_id());
