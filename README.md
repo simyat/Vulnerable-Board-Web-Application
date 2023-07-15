@@ -7,6 +7,6 @@ Normaltic 웹 해킹 스터디에서 사용하는 웹 서버를 구축한다.
 - Java 11
 - javascript
 - Cookie/Session
-- JDBC *Mybatis 변경 예정*
+- JDBC 
 - Oracle XE 11g
- 
+- *Mybatis 변경 예정* 
