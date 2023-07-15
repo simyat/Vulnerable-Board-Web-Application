@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
+
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -39,7 +40,7 @@ public class CommunityWriteController extends HttpServlet {
         ArrayList<String> fileList = fileDriver.fileUpload(req, resp);
         if (fileList.size() > 0) {
             dto.setOriginal_file(fileList.get(0));
-            daoWrite(req, resp, dto);
+            daoWrite(req, resp, dto); // 글 작성
         } else {
             resp.setCharacterEncoding("UTF-8");
             resp.setContentType("text/html;charset=UTF-8");

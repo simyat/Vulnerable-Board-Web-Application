@@ -8,6 +8,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -31,21 +33,27 @@ public class FileDriver extends HttpServlet {
         }
 
         Part part = req.getPart("file");
-
-        // 확장자 검증
-        String fileName = part.getSubmittedFileName();
-        String[] filter = { "jsp", "jspf" };
-        boolean ext = false;
-        for (String check : filter) {
-            ext = fileName.contains(check);
-            if (ext) {
-                break;
+        if (part.getSize() > 0) {
+            // 확장자 검증
+            String fileName = part.getSubmittedFileName();
+            String[] filter = { "jsp", "jspf" };
+            boolean ext = false;
+            for (String check : filter) {
+                ext = fileName.contains(check); // ext is true
+                if (ext) {
+                    // 허가받지 않은 확장자, 업로드 실패
+                    break;
+                }
             }
-        }
-        // 파일 업로드
-        if (!ext) {
-            part.write(uploadFilePath + File.separator + fileName);
-            fileList.add(fileName);
+
+            if (!ext) {
+                // 파일 업로드
+                part.write(uploadFilePath + File.separator + fileName);
+                fileList.add(fileName);
+            }
+        } else {
+            // 첨부 파일 없음.
+            fileList.add("NULL");
         }
         return fileList;
     }

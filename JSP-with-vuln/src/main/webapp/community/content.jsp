@@ -33,7 +33,15 @@
         <%= content.getContent() %>
     </div>
     <div>
-        <a href="/hackthebox/community/download?file=<%= content.getOriginal_file() %>">파일 다운로드</a>
+        <%
+            if (content.getOriginal_file().equals("NULL")){
+                
+            } else {
+        %>
+            <a href="/hackthebox/community/download?file=<%= content.getOriginal_file() %>"><%= content.getOriginal_file() %></a>
+        <%
+            }
+        %>
     </div>
     <div>
         <% 
