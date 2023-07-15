@@ -8,7 +8,7 @@
 ## Skill
 - JSP
 - Java 11
-- javascript
+- JavaScript
 - Cookie/Session
 - JDBC 
 - Oracle XE 11g
