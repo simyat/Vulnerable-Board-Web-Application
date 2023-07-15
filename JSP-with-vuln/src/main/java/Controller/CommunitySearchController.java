@@ -33,8 +33,12 @@ public class CommunitySearchController extends HttpServlet {
         if (filter != null) {
             dto.setCurrentSearchBy(filter);
             dto.setKeywords(req.getParameter("search"));
-            dto.setCurrentSearchDate(req.getParameter("date"));
-            String url = "search?date=" + dto.getCurrentSearchDate() + "&filter=" + dto.getCurrentSearchBy() + "&search="
+            dto.setSearchFromDate(req.getParameter("from_date"));
+            dto.setSearchToDate(req.getParameter("to_date"));
+
+            String url = "search?from_date=" + dto.getSearchFromDate() + "&to_date=" + dto.getSearchToDate() + "&filter="
+                    + dto.getCurrentSearchBy()
+                    + "&search="
                     + dto.getKeywords() + "&";
             daoSearch(req, resp, dto, url);
         } else if (order != null) {
@@ -81,7 +85,7 @@ public class CommunitySearchController extends HttpServlet {
         // 페이지 처리 끝
 
         ArrayList<CommunityDTO> CommunityLists = dao.CommunityListPage(map, query); // 게시물 목록 받기
-        
+
         // 페이징 처리
         String paging = BoardPage.pagingStr(listCount, pageSize,
                 blockPage, page, url);

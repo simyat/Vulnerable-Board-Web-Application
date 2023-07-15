@@ -26,7 +26,8 @@
         <h1>Hack The Box Community</h1>
         <div>
             <form action="/hackthebox/community/search" method="get">
-                <input type="date" name="date" value="" id="current_date" />
+                <input type="date" name="from_date" value=""  />
+                <input type="date" name="to_date" value=""  />
                 <select name="filter" id="">
                     <option value="posts">게시글</option>
                     <option value="title">제목</option>

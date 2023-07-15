@@ -13,7 +13,7 @@ public class SearchDAO {
     private ResultSet rs;
     private DB_Driver driver = new DB_Driver();
 
-    public String CommunitySearchQuery(SearchDTO dto){
+    public String CommunitySearchQuery(SearchDTO dto) {
         String query = SearchByConditions(dto);
         return query;
     }
@@ -40,7 +40,7 @@ public class SearchDAO {
         } finally {
             driver.dbClose(rs, stmt, conn);
         }
-        searchCount = size.size(); // 리스트에 담은 게시물 개수 반환 
+        searchCount = size.size(); // 리스트에 담은 게시물 개수 반환
         return searchCount; // 게시물 개수 서블릿으로 반환
     }
 
@@ -72,23 +72,26 @@ public class SearchDAO {
     // 제목, 작성자, 내용 검색
     private String CurrentSearchBy(SearchDTO dto, String query) {
         if (dto.getCurrentSearchBy().equals("posts")) {
-            if (!dto.getCurrentSearchDate().isEmpty()) {
+            if (!dto.getSearchFromDate().isEmpty()) {
                 query = "SELECT * FROM BOARD WHERE LOWER(CONTENT) LIKE LOWER('%" + dto.getKeywords() + "%')" +
-                        "AND TRUNC(POSTDATE) = TO_DATE('" + dto.getCurrentSearchDate() + "', 'YYYY-MM-DD')";
+                        "AND POSTDATE >= TO_DATE('" + dto.getSearchFromDate()
+                        + "', 'YYYY-MM-DD') AND POSTDATE <= TO_DATE('" + dto.getSearchToDate() + "', 'YYYY-MM-DD') + 1";
             } else {
                 query = "SELECT * FROM BOARD WHERE LOWER(CONTENT) LIKE LOWER('%" + dto.getKeywords() + "%')";
             }
         } else if (dto.getCurrentSearchBy().equals("title")) {
-            if (!dto.getCurrentSearchDate().isEmpty()) {
+            if (!dto.getSearchFromDate().isEmpty()) {
                 query = "SELECT * FROM BOARD WHERE LOWER(TITLE) LIKE LOWER('%" + dto.getKeywords() + "%')" +
-                        "AND TRUNC(POSTDATE) = TO_DATE('" + dto.getCurrentSearchDate() + "', 'YYYY-MM-DD')";
+                        "AND POSTDATE >= TO_DATE('" + dto.getSearchFromDate()
+                        + "', 'YYYY-MM-DD') AND POSTDATE <= TO_DATE('" + dto.getSearchToDate() + "', 'YYYY-MM-DD') + 1";
             } else {
                 query = "SELECT * FROM BOARD WHERE LOWER(TITLE) LIKE LOWER('%" + dto.getKeywords() + "%')";
             }
         } else if (dto.getCurrentSearchBy().equals("author")) {
-            if (!dto.getCurrentSearchDate().isEmpty()) {
+            if (!dto.getSearchFromDate().isEmpty()) {
                 query = "SELECT * FROM BOARD WHERE LOWER(NAME) LIKE LOWER('%" + dto.getKeywords() + "%')" +
-                        "AND TRUNC(POSTDATE) = TO_DATE('" + dto.getCurrentSearchDate() + "', 'YYYY-MM-DD')";
+                        "AND POSTDATE >= TO_DATE('" + dto.getSearchFromDate()
+                        + "', 'YYYY-MM-DD') AND POSTDATE <= TO_DATE('" + dto.getSearchToDate() + "', 'YYYY-MM-DD') + 1";
             } else {
                 query = "SELECT * FROM BOARD WHERE LOWER(NAME) LIKE LOWER('%" + dto.getKeywords() + "%')";
             }
