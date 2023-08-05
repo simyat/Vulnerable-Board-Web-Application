@@ -6,22 +6,25 @@ import java.util.ArrayList;
 
 public class UserDAO {
     private Connection conn; // DB Connection 객체
-    private Statement stmt; // SQL문 질의 객체
+    private PreparedStatement psmt; // SQL문 질의 객체
+    private Statement stmt;
     private ResultSet rs; // DB에서 리턴받는 데이터 객체
     private DB_Driver driver = new DB_Driver();
 
     // 회원가입
-    public int UserInsert(UserDTO vo) {
-        String query = "INSERT INTO users(user_id, name, password, address) VALUES('" + vo.getUser_id() + "', '"
-                + vo.getName() + "', '" + vo.getPassword() + "', + '" + vo.getAddress() + "')"; // Oracle query
+    public int UserInsert(UserDTO dto) {
+        String query = "INSERT INTO users(user_id, name, password, address) VALUES(?, ?, ?, ?)";
         int cnt = -1; // query 실행 결과
-
+        
         // Connecrtion 객체 생성
         conn = driver.getConnect();
         try {
-            stmt = conn.createStatement(); // 불완전한 SQL문을 전송해 미리 컴파일을 시킨다. (미리 컴파일을 시켰기에 속도가 빠르다)
-            cnt = stmt.executeUpdate(query); // 전송(SQL 실행) -> // 정상적으로 Insert 되었다면 성공한 행은 1개이므로 1이 리턴된다. Insert 실패하면 0을
-                                             // 리턴한다.
+            psmt = conn.prepareStatement(query); // 불완전한 SQL문을 전송해 미리 컴파일을 시킨다. (미리 컴파일을 시켰기에 속도가 빠르다)
+            psmt.setString(1, dto.getUser_id());
+            psmt.setString(2, dto.getName());
+            psmt.setString(3, dto.getPassword());
+            psmt.setString(4, dto.getAddress());
+            cnt = psmt.executeUpdate(); // 전송(SQL 실행) -> 정상적으로 Insert 되었다면 성공한 행은 1개이므로 1이 리턴된다. Insert 실패하면 0을 리턴한다.
         } catch (SQLIntegrityConstraintViolationException e) {
             e.printStackTrace();
             String message = e.getMessage();
@@ -33,33 +36,32 @@ public class UserDAO {
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            driver.dbClose(stmt, conn);
+            driver.dbClose(psmt, conn);
         }
         return cnt; // 1 or 0 or 4
     } // UserInsert()
 
     // 로그인
-    public UserDTO UserSelect(String userId, String userPass) {
-        UserDTO vo = new UserDTO();
-        String query = "SELECT * FROM users WHERE user_id='" + userId + "'" + " AND password='" + userPass + "'";
+    public UserDTO UserSelect(UserDTO dto) {
+        UserDTO result = new UserDTO();
+        String query = "SELECT * FROM users WHERE user_id=? AND password=?";
         conn = driver.getConnect();
         try {
-            stmt = conn.createStatement();
-            rs = stmt.executeQuery(query);
-
+            psmt = conn.prepareStatement(query);
+            psmt.setString(1, dto.getUser_id());
+            psmt.setString(2, dto.getPassword());
+            rs = psmt.executeQuery();
+            
             if (rs.next()) {
-                vo.setUser_id(rs.getString("user_id"));
-                vo.setName(rs.getString("name"));
-                vo.setPassword(rs.getString("password"));
-                vo.setAddress(rs.getString("address"));
-                vo.setRegidate(rs.getString("regidate"));
+                result.setUser_id(rs.getString("user_id"));
+                result.setName(rs.getString("name"));
             }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
             driver.dbClose(rs, stmt, conn);
         }
-        return vo;
+        return result;
     }
 
     // 주소 검색

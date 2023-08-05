@@ -18,12 +18,12 @@ public class UserLoginController extends HttpServlet {
         String userPwd;
         JSONObject json;
 
-        UserDTO newVo = (UserDTO) req.getAttribute("vo");
+        UserDTO singupDTO = (UserDTO) req.getAttribute("vo"); // 회원가입 DTO
 
-        if (newVo != null) {
+        if (singupDTO != null) {
             // 회원가입 요청 시 받는 파라미터
-            userId = newVo.getUser_id();
-            userPwd = newVo.getPassword();
+            userId = singupDTO.getUser_id();
+            userPwd = singupDTO.getPassword();
         } else {
             BufferedReader br = req.getReader();
             StringBuilder sb = new StringBuilder(); // append 하기위해 StringBuilder 사용
@@ -39,22 +39,26 @@ public class UserLoginController extends HttpServlet {
             userPwd = json.getString("user_pw");
         }
 
+        UserDTO loginDTO = new UserDTO();
+        loginDTO.setUser_id(userId);
+        loginDTO.setPassword(userPwd);
+
         // TODO: username과 password를 검증하는 코드 작성
         UserDAO dao = new UserDAO();
-        UserDTO vo = dao.UserSelect(userId, userPwd);
+        UserDTO dto = dao.UserSelect(loginDTO);
 
-        if (vo.getUser_id() != null) {
-            if (newVo != null) {
-                // 회원가입 성공 
+        if (dto.getUser_id() != null) {
+            if (singupDTO != null) {
+                // 회원가입 성공
                 json = new JSONObject();
                 json.put("signup", "success");
 
                 // 세션 생성
                 HttpSession session = req.getSession();
-                session.setAttribute("UserId", newVo.getUser_id());
-                session.setAttribute("UserName", newVo.getName());
-                
-                // 쿠키 생성 
+                session.setAttribute("UserId", dto.getUser_id());
+                session.setAttribute("UserName", dto.getName());
+
+                // 쿠키 생성
                 // String sessionId = session.getId(); // 세션 ID를 문자열로 변환
                 // String cookieName = vo.getUser_id(); // 회원 아이디를 쿠키 이름으로 지정
                 // Cookie Cookie = new Cookie(cookieName, sessionId);
@@ -77,8 +81,8 @@ public class UserLoginController extends HttpServlet {
 
                 // 세션 생성
                 HttpSession session = req.getSession();
-                session.setAttribute("UserId", vo.getUser_id());
-                session.setAttribute("UserName", vo.getName());
+                session.setAttribute("UserId", dto.getUser_id());
+                session.setAttribute("UserName", dto.getName());
                 // String sessionId = session.getId(); // 세션 ID를 문자열로 변환
                 // String cookieName = vo.getUser_id(); // 회원 아이디를 쿠키 이름으로 지정
                 // Cookie Cookie = new Cookie(cookieName, sessionId);
