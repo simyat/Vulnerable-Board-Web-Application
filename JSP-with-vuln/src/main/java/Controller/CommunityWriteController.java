@@ -29,7 +29,7 @@ public class CommunityWriteController extends HttpServlet {
         String userName = (String) session.getAttribute("UserName");
         String title = req.getParameter(req.getPart("title").getName());
         String content = req.getParameter(req.getPart("content").getName());
-
+        
         CommunityDTO dto = new CommunityDTO();
         dto.setUser_id(userId);
         dto.setName(userName);

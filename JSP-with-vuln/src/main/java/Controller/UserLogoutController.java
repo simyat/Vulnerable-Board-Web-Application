@@ -22,7 +22,7 @@ public class UserLogoutController extends HttpServlet {
         // 모든 속성 한꺼번에 삭제
 //        서버가 세션 정보를 더 이상 유지할 필요가 없어 부담이 적어지므로 invalidate()가 더 좋다.
         session.invalidate();
-
+        
         // 속성 삭제 후 페이지 이동
         RequestDispatcher requestDispatcher = req.getRequestDispatcher("index.jsp");
         requestDispatcher.forward(req, resp);
