@@ -17,7 +17,6 @@ function search_form() {
 
     form.addEventListener("submit", (event) => {
         event.preventDefault(); // 기본 제출 동작 막기
-
         const formData = new FormData(form);
         const address = formData.get("address");
         const encodedURL = encodeURIComponent(address);
@@ -43,7 +42,6 @@ function search_form() {
                             button_check[i].parentNode.removeChild(button_check[i]);
                         }
                     }
-
                     for (let i = 0; i < count; i++) {
                         const button = document.createElement("button");
                         button.classList.add("btn", "btn-success", "btn-block", "mt-3", "check-button");
@@ -61,13 +59,11 @@ function search_form() {
                         }
                         searchContents.appendChild(button);
                     }
-
                     if (count > 5) {
                         dialog.style.marginTop = "2%"; // modal 위치 조정
                     } else {
                         dialog.style.marginTop = "-11%"; // modal 위치 조정
                     }
-
                     inputHTML();
                 } else if (result.search === "fail") {
                     alert("검색 결과가 없습니다.");
@@ -79,5 +75,4 @@ function search_form() {
             });
     });
 }
-
 search_form();

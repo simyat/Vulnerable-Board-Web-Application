@@ -111,7 +111,7 @@ public class CommunityDAO {
         return list;
     }
 
-    // 게시글 상세정보 가져오기
+    // 글 읽기
     public CommunityDTO CommunityContent(String postId) {
         String query = "SELECT * FROM BOARD WHERE ID='" + postId + "'";
         CommunityDTO dto = null;
@@ -143,6 +143,7 @@ public class CommunityDAO {
         return dto;
     }
 
+    // 조회 수 업데이트
     public void UpdateVisitCount(String contentNumber) {
         String query = "UPDATE BOARD SET " + " visit_count=visit_count+1 " + " WHERE id='" + contentNumber + "'";
         conn = driver.getConnect();
@@ -160,6 +161,7 @@ public class CommunityDAO {
         }
     }
 
+    //  글 수정
     public int CommunityModify(CommunityDTO dto) {
         String query = "UPDATE BOARD SET user_id='"+ dto.getUser_id() +"', name='" + dto.getName() + "', title='" 
         + escapeSingleQuotes(dto.getTitle()) + "', content='" + escapeSingleQuotes(dto.getContent())
@@ -186,6 +188,7 @@ public class CommunityDAO {
         return postId;
     }
 
+    //  글 작성
     public int CommunityWrite(CommunityDTO dto) {
         String query = "INSERT INTO BOARD (id, user_id, name, title, content, postdate, original_file) VALUES (SEQ_BOARD_ID.NEXTVAL, '"
                 + dto.getUser_id() + "', '" + dto.getName() + "', '" + escapeSingleQuotes(dto.getTitle()) + "', '"
@@ -222,6 +225,7 @@ public class CommunityDAO {
         return value.replace("'", "''");
     }
 
+    // 글 삭제
     public int CommunityDelete(String contentNumber, CommunityDTO dto) {
         String query = "DELETE FROM BOARD WHERE ID = '" + contentNumber + "' and USER_ID= '" + dto.getUser_id() + "'";
         int result = -1;
@@ -240,5 +244,4 @@ public class CommunityDAO {
         }
         return result;
     }
-
 }

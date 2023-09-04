@@ -94,7 +94,6 @@ public class UserDAO {
 
             while (rs.next()) {
                 AddressDTO vo = new AddressDTO();
-
                 sido = rs.getString("sido");
                 sigungu = rs.getString("sigungu");
                 doro_name = rs.getString("doro_name");
@@ -122,7 +121,7 @@ public class UserDAO {
         return vo_list;
     }
 
-    // 주소 분할 분리 예정
+    // 주소 분할
     private ArrayList<String> SplitAddress(String address) {
         String tmp = null;
         String[] result;

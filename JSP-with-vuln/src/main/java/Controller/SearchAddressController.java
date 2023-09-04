@@ -36,7 +36,6 @@ public class SearchAddressController extends HttpServlet {
                 AddressDTO vo = vo_list.get(i);
                 String result = vo.getSido() + " " + vo.getSigungu() + " " + vo.getDoro_name() + " "
                         + vo.getSigungu_building_name();
-
                 if (!set.add(result)) {
                     continue;
                 }
@@ -49,17 +48,14 @@ public class SearchAddressController extends HttpServlet {
             }
             jsonObj.put("search", "success");
             jsonObj.put("address", jsonArr);
-
             resp.setContentType("application/json");
             resp.setCharacterEncoding("UTF-8");
             PrintWriter out = resp.getWriter();
             out.print(jsonObj.toString());
-
             out.flush();
         } else {
             jsonObj = new JSONObject();
             jsonObj.put("search", "fail");
-
             resp.setContentType("application/json");
             resp.setCharacterEncoding("UTF-8");
             PrintWriter out = resp.getWriter();

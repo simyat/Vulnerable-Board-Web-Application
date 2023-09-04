@@ -7,6 +7,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import util.DB_Driver;
 
+// 게시판 검색 DAO
 public class SearchDAO {
     private Connection conn;
     private Statement stmt;

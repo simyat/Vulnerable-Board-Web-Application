@@ -25,6 +25,7 @@ public class UserLoginController extends HttpServlet {
             userId = singupDTO.getUser_id();
             userPwd = singupDTO.getPassword();
         } else {
+            // JSON parsing
             BufferedReader br = req.getReader();
             StringBuilder sb = new StringBuilder(); // append 하기위해 StringBuilder 사용
             String line;
